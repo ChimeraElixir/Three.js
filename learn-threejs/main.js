@@ -1,9 +1,8 @@
 import * as THREE from "three"
 import { OrbitControls } from "three/addons/controls/OrbitControls.js"
-import {RGBELoader} from "three/addons/loaders/RGBELoader.js"
-import {GLTFLoader} from "three/addons/loaders/GLTFLoader.js"
+import { RGBELoader } from "three/addons/loaders/RGBELoader.js"
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js"
 import * as lil from "lil-gui"
-
 
 const scene = new THREE.Scene()
 const camera = new THREE.PerspectiveCamera(
@@ -12,11 +11,14 @@ const camera = new THREE.PerspectiveCamera(
 	0.1,
 	1000
 )
-camera.position.set(0,0,5)
+camera.position.set(0, 0, 5)
 
 const canvas = document.querySelector("#draw")
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
 renderer.setSize(window.innerWidth, window.innerHeight)
+
+const asixHelper = new THREE.AxesHelper(5)
+scene.add(asixHelper)
 
 const rbgeloader = new RGBELoader()
 rbgeloader.load(
@@ -30,17 +32,16 @@ rbgeloader.load(
 
 const gltfLoader = new GLTFLoader()
 gltfLoader.load("wooden_box.glb", (gltf) => {
-    gltf.scene.position.y = -1 
+	gltf.scene.position.y = -1
 	scene.add(gltf.scene)
 })
-
 
 // let ambientLight = new THREE.AmbientLight(0xffffff, 2)
 // scene.add(ambientLight)
 
 // let directionalLight = new THREE.DirectionalLight(0xffffff, 2)
 // directionalLight.position.set(2, 2, 2)
-// scene.add(directionalLight) 
+// scene.add(directionalLight)
 
 // let pointLight = new THREE.PointLight(0xffffff, 1,10,2)
 // pointLight.position.set(.3, -1.34, 1)
@@ -72,7 +73,6 @@ gltfLoader.load("wooden_box.glb", (gltf) => {
 const controls = new OrbitControls(camera, renderer.domElement)
 controls.enableDamping = true
 
-
 // const gui = new lil.GUI()
 
 // const lightFolder = gui.addFolder('Lights')
@@ -80,7 +80,7 @@ controls.enableDamping = true
 // const ambientLightFolder = lightFolder.addFolder('Ambient Light')
 // ambientLightFolder.add(ambientLight, 'intensity').min(0).max(10).step(0.1).name('Intensity')
 
-// const directionalLightFolder = lightFolder.addFolder('Directional Light') 
+// const directionalLightFolder = lightFolder.addFolder('Directional Light')
 // directionalLightFolder.add(directionalLight, 'intensity').min(0).max(10).step(0.1).name('Intensity')
 // directionalLightFolder.add(directionalLight.position, 'x').min(-5).max(5).step(0.1).name('X Position')
 // directionalLightFolder.add(directionalLight.position, 'y').min(-5).max(5).step(0.1).name('Y Position')
@@ -93,9 +93,6 @@ controls.enableDamping = true
 // pointLightFolder.add(pointLight.position, 'z').min(-5).max(5).step(0.1).name('Z Position')
 // pointLightFolder.add(pointLight, 'distance').min(0).max(20).step(0.1).name('Distance')
 // pointLightFolder.add(pointLight, 'decay').min(0).max(10).step(0.1).name('Decay')
-
-
-
 
 window.addEventListener("resize", () => {
 	renderer.setSize(window.innerWidth, window.innerHeight)
