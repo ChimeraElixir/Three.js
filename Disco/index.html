@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Disco</title>
+		<title>Club World</title>
 		<style>
 			body {
 				margin: 0;
@@ -11,9 +11,50 @@
 				width: 100vw;
 				height: 100vh;
 			}
+			.progress-bar-container {
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				transform: translate(-50%, -50%);
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 1);
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+			}
+			#progress-bar {
+				width: 30%;
+				margin-top: 0.5%;
+				height: 2%;
+			}
+			label {
+				color: white;
+				font-size: 2rem;
+				font-weight: bold;
+			}
+			#play-button {
+				margin-top: 20px;
+				padding: 10px 20px;
+				font-size: 1.2rem;
+				cursor: pointer;
+				background-color: #4caf50;
+				color: white;
+				border: none;
+				border-radius: 5px;
+			}
+			#play-button:hover {
+				background-color: #45a049;
+			}
 		</style>
 	</head>
 	<body>
+		<div class="progress-bar-container">
+			<label for="progress-bar">Loading ....</label>
+			<progress id="progress-bar" value="0" max="100"></progress>
+			<button id="play-button" style="display: none">Start</button>
+		</div>
 		<canvas id="draw"></canvas>
 		<script type="module" src="/src/main.js"></script>
 	</body>

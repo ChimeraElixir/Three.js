@@ -48,12 +48,12 @@ function loadModel(path, scale, mixers, floor, matrix, rows, cols, loader) {
 			const action = mixer.clipAction(clip)
 			action.play()
 		},
-		(progress) => {
-			console.log(`Loading: ${(progress.loaded / progress.total) * 100}%`)
-		},
-		(error) => {
-			console.error("Error loading model:", error)
-		}
+		// (progress) => {
+		// 	console.log(`Loading: ${(progress.loaded / progress.total) * 100}%`)
+		// },
+		// (error) => {
+		// 	console.error("Error loading model:", error)
+		// }
 	)
 }
 

@@ -8,6 +8,7 @@ import { hdriLoader } from "./modules/hdri.js"
 import { globeLoader } from "./modules/enviornment.js"
 import { danceFloorLoader } from "./modules/walls.js"
 import { models } from "./modules/models.js"
+import { setupAudio } from "./modules/audio.js"
 
 //Renderer
 const canvas = document.querySelector("canvas")
@@ -29,20 +30,65 @@ scene.add(camera)
 const controls = new OrbitControls(camera, renderer.domElement)
 controls.enableDamping = true
 
+const loadingManager = new THREE.LoadingManager()
 
+const rgbeloader = new RGBELoader(loadingManager)
+const loader = new GLTFLoader(loadingManager)
+const textureLoader = new THREE.TextureLoader(loadingManager)
+const audioLoader = new THREE.AudioLoader(loadingManager)
 
-const textureLoader = new THREE.TextureLoader()
-const rgbeloader = new RGBELoader()
-const loader = new GLTFLoader()
+const progressBar = document.getElementById("progress-bar")
+loadingManager.onProgress = (url, itemsLoaded, itemsTotal) => {
+	progressBar.value = (itemsLoaded / itemsTotal) * 100
+}
+// // create an AudioListener and add it to the camera
+// const listener = new THREE.AudioListener()
+// camera.add(listener)
+
+// // create the PositionalAudio object (passing in the listener)
+// const sound = new THREE.PositionalAudio(listener)
+// audioLoader.load(
+// 	"sounds/dark cat - BUBBLE TEA (feat. juu  cinders).mp3",
+// 	function (buffer) {
+// 		sound.setBuffer(buffer)
+// 		sound.setRefDistance(10)
+// 		sound.play()
+// 	}
+// )
+// const obj = new THREE.Object3D()
+// scene.add(obj)
+// obj.add(sound)
+
+// obj.position.set(30, 15, 30)
+// obj.add(sound)
+
+const progressBarContainer = document.querySelector(".progress-bar-container")
+const playButton = document.getElementById("play-button")
+
+loadingManager.onLoad = () => {
+	// Show play button when loading is complete
+	playButton.style.display = "block"
+
+	// Setup click handler for play button
+	playButton.addEventListener(
+		"click",
+		() => {
+			const sound = setupAudio(camera, scene, audioLoader)
+			// Hide the entire container after clicking play
+			progressBarContainer.style.display = "none"
+		},
+		{ once: true }
+	) // ensure it only triggers once
+}
 
 //RGBE Loader HDRI
 export const mixers = []
 const Lights = []
 
-const hdri ="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/gym_entrance_1k.hdr"
+const hdri =
+	"https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/gym_entrance_1k.hdr"
 const enviornment = "./models/free_realistic_disco_ball.glb"
 const danceFloor = "./models/animated_dance_floor_neon_lights.glb"
-
 
 const texture = {
 	map: "./textures/walls/v1y3lcxo_2k_normal.png",
@@ -51,45 +97,25 @@ const texture = {
 	metalnessMap: "./textures/walls/v1y3lcxo_2k_metalness.png",
 }
 
-
-
-const {floor,rightWall,leftWall,topWall} = createWalls(scene, 30, 30, 30, 30, texture, textureLoader)
+const { floor, rightWall, leftWall, topWall } = createWalls(
+	scene,
+	30,
+	30,
+	30,
+	30,
+	texture,
+	textureLoader
+)
 
 hdriLoader(scene, hdri, rgbeloader)
 
 globeLoader(scene, enviornment, loader, mixers, topWall)
 
-danceFloorLoader(scene,danceFloor,loader,mixers)
+danceFloorLoader(scene, danceFloor, loader, mixers)
 
 setupLights(scene, 10, Lights)
 
-models(loader,20,mixers,floor,30,30)
-
-
-// create an AudioListener and add it to the camera
-const listener = new THREE.AudioListener()
-camera.add(listener)
-
-// create the PositionalAudio object (passing in the listener)
-const sound = new THREE.PositionalAudio(listener)
-
-const audioLoader = new THREE.AudioLoader()
-audioLoader.load(
-	"sounds/dark cat - BUBBLE TEA (feat. juu  cinders).mp3",
-	function (buffer) {
-		sound.setBuffer(buffer)
-		sound.setRefDistance(10)
-		sound.play()
-	}
-)
-const obj = new THREE.Object3D()
-scene.add(obj)
-obj.add(sound)
-
-obj.position.set(30, 15, 30)
-obj.add(sound)
-
-
+models(loader, 20, mixers, floor, 30, 30)
 
 const clock = new THREE.Clock()
 function animate() {

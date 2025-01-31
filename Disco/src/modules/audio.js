@@ -1,29 +1,30 @@
 import * as THREE from "three"
 
-export function setupAudio(camera, scene) {
+export function setupAudio(camera, scene, audioLoader) {
 	const listener = new THREE.AudioListener()
 	camera.add(listener)
 
 	const sound = new THREE.PositionalAudio(listener)
 	const obj = new THREE.Object3D()
-	obj.position.set(15, 15, 15)
 	scene.add(obj)
-	obj.add(sound)
+	obj.position.set(30, 15, 30)
+	obj.add(sound) // Add sound only once
 
-	const audioLoader = new THREE.AudioLoader()
-	return new Promise((resolve, reject) => {
-		audioLoader.load(
-			"./sounds/music.mp3",
-			(buffer) => {
-				sound.setBuffer(buffer)
-				sound.setRefDistance(20)
-				sound.setMaxDistance(100)
-				sound.setLoop(true)
-				sound.setVolume(1.0)
-				resolve(sound)
-			},
-			undefined,
-			reject
-		)
+	audioLoader.load("sounds/xxanteria-baixo.mp3", function (buffer) {
+		sound.setBuffer(buffer)
+		sound.setRefDistance(10)
+		sound.setLoop(true) // Make the music loop
+		sound.setVolume(0.8) // Set volume
+
+		// Resume audio context before playing
+		if (listener.context.state === "suspended") {
+			listener.context.resume().then(() => {
+				sound.play()
+			})
+		} else {
+			sound.play()
+		}
 	})
+
+	return sound
 }
