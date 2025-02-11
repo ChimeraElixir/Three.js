@@ -15,4 +15,8 @@ export const modelsData = {
 	},
 	11: { path: "./models/harley_quinn_animated.glb", scale: 2 },
 	12: { path: "./models/nabbagos_moves.glb", scale: 0.7 },
+	// 1: {
+	// 	path: "./models/ImageToStl.com_mutant@swingdancing.glb",
+	// 	scale: 10,
+	// },
 }

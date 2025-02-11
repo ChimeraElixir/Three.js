@@ -15,6 +15,7 @@ const canvas = document.querySelector("canvas")
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
 renderer.setSize(window.innerWidth, window.innerHeight)
 
+
 //Scene and Camera
 export const scene = new THREE.Scene()
 const camera = new THREE.PerspectiveCamera(
@@ -115,7 +116,9 @@ danceFloorLoader(scene, danceFloor, loader, mixers)
 
 setupLights(scene, 10, Lights)
 
-models(loader, 20, mixers, floor, 30, 30)
+models(loader, 1, mixers, floor, 30, 30)
+
+console.log(mixers)
 
 const clock = new THREE.Clock()
 function animate() {
